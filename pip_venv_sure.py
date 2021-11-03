@@ -19,13 +19,12 @@ def venv_is_active() -> bool:
 def main() -> int:
 
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("-anv", "--allow-no-venv",
+    parser.add_argument("--allow-no-venv",
                         action="store_true",
                         help="Install packages without checking whether a venv is activated.")
     parser.add_argument("--help", action="store_true", help="Show help")
 
     args, rest = parser.parse_known_args()
-    print(rest)
 
     if args.help:
         parser.print_help()

@@ -19,8 +19,4 @@ Some times there is a need to install package directly to the base installation 
 
 ```commandline
 pip3 install any-template --allow-no-venv
-
-# OR
-
-pip3 install any-template -anv
 ```
