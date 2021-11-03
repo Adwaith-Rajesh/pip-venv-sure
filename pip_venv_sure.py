@@ -3,6 +3,15 @@ import os
 import sys
 
 
+if sys.platform == 'win32':  # pragma: win32 no cover
+    import subprocess
+
+    def execvp(cmd: str, args: 'list[str]') -> int:
+        return subprocess.call(args)
+else:  # pragma: posix no cover
+    from os import execvp
+
+
 def venv_is_active() -> bool:
     return True if os.environ.get("VIRTUAL_ENV", None) else False
 
@@ -23,20 +32,20 @@ def main() -> int:
         print()
         print("pip3 --help")
         print("=" * 79)
-        os.execvp("pip3", ("pip3", "--help"))
+        cmd = ["pip3", *("pip3", "--help")]
 
     if venv_is_active() or args.allow_no_venv:
 
-        cmd = (
+        cmd = [
             "pip3",
             *rest
-        )
+        ]
 
     else:
         print("Activate your venv kiddo!", file=sys.stderr)
         return 1
 
-    return os.execvp(cmd[0], cmd)
+    return execvp(cmd[0], cmd)
 
 
 if __name__ == "__main__":
