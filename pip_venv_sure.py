@@ -25,6 +25,7 @@ def main() -> int:
     parser.add_argument("--help", action="store_true", help="Show help")
 
     args, rest = parser.parse_known_args()
+    print(rest)
 
     if args.help:
         parser.print_help()
@@ -32,20 +33,24 @@ def main() -> int:
         print()
         print("pip3 --help")
         print("=" * 79)
-        cmd = ["pip3", *("pip3", "--help")]
+        cmd = ["pip3", "--help"]
+        return execvp(cmd[0], cmd)
 
-    if venv_is_active() or args.allow_no_venv:
-
-        cmd = [
-            "pip3",
-            *rest
-        ]
+    elif venv_is_active() or args.allow_no_venv:
+        cmd = ["pip3", *rest]
+        return execvp(cmd[0], cmd)
 
     else:
-        print("Activate your venv kiddo!", file=sys.stderr)
-        return 1
+        if len(rest) >= 1:
+            if rest[0] == "install":
+                print("Activate your venv kiddo!", file=sys.stderr)
+                return 1
 
-    return execvp(cmd[0], cmd)
+            else:
+                cmd = ["pip3", *rest]
+                return execvp(cmd[0], cmd)
+
+    return 0
 
 
 if __name__ == "__main__":
